@@ -1,10 +1,16 @@
 from pygame import *
 from random import *
 
+score1 = 0
+score2 = 0
 
 window = display.set_mode((700, 500))
 display.set_caption('يهعلبت')
-background = transform.scale(image.load('wh.jpg'), (700, 500))
+background = transform.scale(image.load('bckgrd.png'), (700, 500))
+
+
+font.init()
+font1 = font.Font(None, 36)
 
 
 clock = time.Clock()
@@ -43,13 +49,16 @@ class Enemy(GameSprite):
 
 class Ball(GameSprite):
      def update(self):
+        global score1, score2
         self.rect.x += self.speedX
         self.rect.y += self.speedY
         if self.rect.x <= 0:
-           self.rect.x = 500
+          self.rect.x = 500
+          score2 = score2 + 1
 
-        if self.rect.x >= 650:
-            self.rect.x = 100
+        if self.rect.x >= 650:  
+          self.rect.x = 100
+          score1 = score1 + 1
 
         if self.rect.y <= 0:
              self.speedY *= -1
@@ -62,33 +71,32 @@ class Ball(GameSprite):
              self.speedX *= -1
 
         
-sprite1 = Player('player.png', 630,200,5)
-sprite2 = Enemy('player2.jpg', 5,200,5)
-sprite3 = Player('ball.jpg', 30,80,5)
+sprite1 = Player('player.png', 200, 0, 7, 15, 80)
+sprite2 = Enemy('player2.jpg', 200, 685, 7, 15, 80)
+sprite3 = Ball('ball.png', 30, 80, 7, 70, 50)
 
 
 finish = False
 game = True
 
 while game:
-    if finish != True:
-        window.blit(background,(0, 0))
-        sprite1.reset()
-        sprite1.update()
-        sprite2.reset()
-        sprite2.update()
-        sprite3.reset()
-        sprite3.update()
-        display.update()
-
-    def reset(self):
-         window.blit(self.image,(self.rect.x,self.rect.y))
-
+     if finish != True:
+          window.blit(background,(0, 0))
+          sprite1.reset()
+          sprite1.update()
+          sprite2.reset()
+          sprite2.update()
+          sprite3.reset()
+          sprite3.update()
+          text1 = font1.render(str(score1) + ':' + str(score2), 1, (255, 255 , 255))
+          window.blit(text1, (330, 50))
+        
 
 
-    for e in event.get():
-        if e.type == QUIT:
-            game = False
 
+     for e in event.get():
+          if e.type == QUIT:
+               game = False
 
-    clock.tick(FPS)  
+     display.update()
+     clock.tick(FPS)  
